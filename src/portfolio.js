@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Cort from './Cort';
-function Portfolio({ params }) {
+function Portfolio() {
 
     const { slug } = useParams();
     const [obj, setobj] = useState(null)
