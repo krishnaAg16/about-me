@@ -8,7 +8,7 @@ function Personal({ detail, setDetail, className }) {
     const checkURL = useMemo(() =>
         debounce(async (value) => {
             try {
-                await axios.get(`${process.env.REACT_APP_BASE_URL}/api/data/${value}`);
+                await axios.get(`https:/about-me-backend-k29v.onrender.com/api/data/${value}`);
                 document.getElementById('url').setCustomValidity('URL already used');
                 setDetail((prevDetail) => ({ ...prevDetail, slug: false }));
 

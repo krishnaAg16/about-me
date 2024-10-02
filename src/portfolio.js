@@ -10,7 +10,7 @@ function Portfolio() {
     useEffect(() => {
         const fetchPage = async () => {
             try {
-                const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/data/${slug}`);
+                const res = await axios.get(`https:/about-me-backend-k29v.onrender.com/api/data/${slug}`);
                 setobj(res.data);
             } catch (err) {
                 seterror(err)
