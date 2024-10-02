@@ -3,7 +3,6 @@ import Cort from "./Cort";
 import Editor from "./EditPage";
 
 function App() {
-  const [preview, setpreview] = useState(false)
   const [page, setPage] = useState(true)
   const [obj, setObj] = useState({ hero: {}, about: {}, service: {}, experience: {}, contact: {} })
 
@@ -20,17 +19,7 @@ function App() {
     </button>
 
     {page && <Cort />}
-
-    {!page && <>
-      <button className="bg-blue-500 text-white shadow-xl rounded-lg fixed right-20 top-[19px] z-20 px-2 py-1 text-lg hidden md:block"
-        onClick={() => {
-          setpreview(!preview)
-        }}>
-        {!preview ? "Preview" : "Edit"}
-      </button>
-      {preview && <Cort obj={obj} />}
-      {!preview && <Editor obj={obj} setObj={setObj} />}
-    </>}
+    {!page && <Editor obj={obj} setObj={setObj} />}
 
   </>
 }

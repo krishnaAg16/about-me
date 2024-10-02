@@ -8,9 +8,10 @@ function Personal({ detail, setDetail, className }) {
     const checkURL = useMemo(() =>
         debounce(async (value) => {
             try {
-                await axios.get(`http://localhost:5500/api/data/${value}`);
+                await axios.get(`${process.env.REACT_APP_BASE_URL}:${process.env.REACT_APP_API_PORT}/api/data/${value}`);
                 document.getElementById('username').setCustomValidity('URL already used');
                 setDetail((prevDetail) => ({ ...prevDetail, slug: false }));
+
             } catch (err) {
                 if (err.response && err.response.status === 404) {
                     document.getElementById('username').setCustomValidity('');
@@ -18,6 +19,7 @@ function Personal({ detail, setDetail, className }) {
                 } else {
                     document.getElementById('username').setCustomValidity('An error occurred, please try again later');
                 }
+            } finally {
                 document.getElementById('username').reportValidity();
             }
         }, 1000)
@@ -514,7 +516,7 @@ function Services({ detail, setDetail, className }) {
                                 autoComplete="title"
                                 placeholder="e.g. Web Development, SEO Marketing"
                                 className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                                onChange={(e) => setNewService({ ...newService, title: e.target.value })}
+                                onInput={(e) => setNewService({ ...newService, title: e.target.value })}
                                 required
                             />
                         </div>
@@ -534,7 +536,7 @@ function Services({ detail, setDetail, className }) {
                             rows={5}
                             className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 focus-visible:outline-none"
                             defaultValue={''}
-                            onChange={(e) => setNewService({ ...newService, desc: e.target.value })}
+                            onInput={(e) => setNewService({ ...newService, desc: e.target.value })}
                             required />
                     </div>
                     <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
@@ -596,6 +598,27 @@ function Experiences({ detail, setDetail, className }) {
                 <p className="mt-1 text-sm leading-6 text-gray-600">
                     This information will be displayed publicly so be careful what you share.
                 </p>
+            </div>
+
+            <div className="mt-5 desc col-span-full border-b border-gray-900/10 pb-12">
+                <label htmlFor="desc" className="block text-sm font-medium leading-6 text-gray-900">
+                    Description
+                </label>
+                <div className="mt-2">
+                    <textarea id="desc-ser" name="desc" rows={4} placeholder="Like I don't know that you are going to use ChatGPT."
+                        defaultValue={detail.experience.desc ? detail.experience.desc : ""}
+                        onChange={(e) => {
+                            setDetail({
+                                ...detail,
+                                experience: {
+                                    ...detail.experience,
+                                    desc: e.target.value ? e.target.value : detail.experience.desc
+                                }
+                            })
+                        }}
+                        className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 focus-visible:outline-none" />
+                </div>
+                <p className="mt-3 text-sm leading-6 text-gray-600">Write a brief description of your experience.</p>
             </div>
 
             <div className="flex gap-2 flex-wrap justify-evenly">

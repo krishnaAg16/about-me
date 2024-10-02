@@ -302,7 +302,7 @@ function Cort({ obj }) {
 
                         <div className="image w-full lg:w-1/2 justify-center flex p-4">
                             <div style={{ borderColor: color.p4 }} className="image-frame border-[12px] rounded-3xl size-[18rem] sm:size-[24rem] md:size-[26rem] lg:size-[21rem] xl:size-[28rem]">
-                                <img src={hero.img} alt="profile" className="rounded-3xl relative bottom-3 right-3 sm:bottom-5 sm:right-5" />
+                                <img src={hero.img} alt="profile" className="rounded-3xl relative bottom-3 right-3 sm:bottom-5 sm:right-5 aspect-square" />
                             </div>
                         </div>
                     </div>
@@ -312,7 +312,7 @@ function Cort({ obj }) {
                     <div className="content flex mx-auto flex-col-reverse lg:flex-row">
                         <div className="image w-full lg:w-1/2 justify-center flex p-4">
                             <div style={{ borderColor: color.p4 }} className="image-frame border-[12px] rounded-3xl size-[18rem] sm:size-[24rem] md:size-[26rem] lg:size-[21rem] xl:size-[28rem]">
-                                <img src={about.img} alt="profile" className="rounded-3xl relative bottom-3 right-3 sm:bottom-5 sm:right-5" />
+                                <img src={about.img} alt="profile" className="rounded-3xl relative bottom-3 right-3 sm:bottom-5 sm:right-5 aspect-square" />
                             </div>
                         </div>
 
@@ -377,7 +377,7 @@ function Cort({ obj }) {
                                             <h3 className="text-2xl tracking-wide font-semibold mt-3" style={{ color: color.p1 }}>
                                                 {experience.title}
                                             </h3>
-                                            <h5 className="font-bold" style={{ color: color.s4 }}>
+                                            <h5 className="font-bold font-mono" style={{ color: color.s4 }}>
                                                 {experience.company}
                                             </h5>
                                             <p className="ml-2 text-base font-normal leading-tight mt-3" style={{ color: color.s5 }}>
