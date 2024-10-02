@@ -33,7 +33,7 @@ export default function Editor({ obj, setObj }) {
     const postPage = async (e) => {
         try {
             e.target.disabled = true;
-            const response = await axios.post(`https:/about-me-backend-k29v.onrender.com/api/data`, obj);
+            const response = await axios.post(`https://about-me-backend-k29v.onrender.com/api/data`, obj);
             setpublish(response.data.id);
             console.log('Data uploaded successfully:', response.data.id);
         } catch (error) {
