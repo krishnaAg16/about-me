@@ -20,7 +20,7 @@ function Personal({ detail, setDetail, className }) {
                     document.getElementById('username').setCustomValidity('An error occurred, please try again later');
                 }
             } finally {
-                document.getElementById('username').reportValidity();
+                document.getElementById('url').reportValidity();
             }
         }, 1000)
         , []);
@@ -45,10 +45,9 @@ function Personal({ detail, setDetail, className }) {
                         <div className={`flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 ${!detail.slug && 'focus-within:ring-red-800'} sm:max-w-md py-2 px-1 ${detail.slug && 'ring-green-900 focus-within:ring-green-900'} ring-2`}>
                             <span className="flex select-none items-center pl-3 tracking-wider font-medium text-gray-500 sm:text-sm">aboutme.com/</span>
                             <input type="text"
-                                name="username"
+                                name="url"
                                 onInput={(e) => checkURL(e.target.value)}
-                                id="username"
-                                autoComplete="username"
+                                id="url"
                                 defaultValue={detail.slug || ""}
                                 className="text-sm ml-0.5 w-full focus-visible:outline-none"
                                 required
