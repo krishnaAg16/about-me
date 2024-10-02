@@ -8,7 +8,7 @@ function App() {
 
   return <>
 
-    <button className={`bg-white flex font-bold bottom-6 left-6 fixed rounded-full z-10 p-2 w-max text-lg border-2 border-yellow-800 shadow-slate-700 shadow-md space-x-1 hover:space-x-2`}
+    <button className={`bg-white flex font-bold bottom-6 left-6 fixed rounded-full z-10 p-2 w-max text-lg border-2 border-yellow-800 shadow-slate-700 shadow-md space-x-1 hover:space-x-2 duration-1000 bg-[length:300%_auto] hover:bg-gradient-to-r from-[#70e1f5] from-0%  via-[#ffcd8b] via-60%  to-[#70e1f5] to-100% hover:bg-right-top`}
       onClick={() => {
         setPage(!page)
       }}
