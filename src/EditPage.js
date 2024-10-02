@@ -108,7 +108,7 @@ export default function Editor({ obj, setObj }) {
                             </div>
 
 
-                            <div className='bg-[#ececef] md:h-[98%] md:w-[49%] rounded overflow-y-auto my-auto'>
+                            <div className='bg-[#ececef] md:w-1/2 overflow-y-auto'>
                                 {page === 1 && <Personal detail={obj} setDetail={setObj} />}
                                 {page === 2 && <Services detail={obj} setDetail={setObj} />}
                                 {page === 3 && <Experiences detail={obj} setDetail={setObj} />}

@@ -8,14 +8,15 @@ function App() {
 
   return <>
 
-    <button className={`bg-gray-300 ${page ? "text-yellow-400 opacity-90" : "text-black"} bottom-4 left-4 fixed rounded-full z-20 p-2 `}
+    <button className={`bg-white flex font-bold bottom-6 left-6 fixed rounded-full z-10 p-2 w-max text-lg border-2 border-yellow-800 shadow-slate-700 shadow-md space-x-1 hover:space-x-2`}
       onClick={() => {
         setPage(!page)
-      }}>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-7">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
+      }}
+    >
+      {page &&
+        <span>Build Your Portfolio</span>} <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`size-6 duration-500 ease-in-out ${!page && 'rotate-180'}`}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
       </svg>
-
     </button>
 
     {page && <Cort />}
