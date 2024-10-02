@@ -9,12 +9,12 @@ function Personal({ detail, setDetail, className }) {
         debounce(async (value) => {
             try {
                 await axios.get(`${process.env.REACT_APP_BASE_URL}/api/data/${value}`);
-                document.getElementById('username').setCustomValidity('URL already used');
+                document.getElementById('url').setCustomValidity('URL already used');
                 setDetail((prevDetail) => ({ ...prevDetail, slug: false }));
 
             } catch (err) {
                 if (err.response && err.response.status === 404) {
-                    document.getElementById('username').setCustomValidity('');
+                    document.getElementById('url').setCustomValidity('');
                     setDetail((prevDetail) => ({ ...prevDetail, slug: value }));
                 } else {
                     document.getElementById('username').setCustomValidity('An error occurred, please try again later');
@@ -37,8 +37,8 @@ function Personal({ detail, setDetail, className }) {
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
 
-                <div className="username sm:col-span-5">
-                    <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                <div className="url sm:col-span-5">
+                    <label htmlFor="url" className="block text-sm font-medium leading-6 text-gray-900">
                         Portfolio URL
                     </label>
                     <div className="mt-2">
