@@ -103,7 +103,7 @@ export default function Editor({ obj, setObj }) {
 
                                 <div className="flex ml-auto space-x-4 mt-auto p-4">
                                     <Link to={"https://github.com/krishnaAg16"} target="_blank"> <FaGithub className="text-5xl p-2 bg-white rounded-full" /> </Link>
-                                    <Link to={"https://linkedin.com/in/krihna-agarwal1611"} target="_blank"> <FaLinkedinIn className="text-5xl p-2 bg-white rounded-full text-blue-800" /> </Link>
+                                    <Link to={"https://www.linkedin.com/in/krishna-agarwal1611/"} target="_blank"> <FaLinkedinIn className="text-5xl p-2 bg-white rounded-full text-blue-800" /> </Link>
                                 </div>
                             </div>
 

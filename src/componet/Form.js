@@ -633,7 +633,7 @@ function Experiences({ detail, setDetail, className }) {
                             <h5 className="font-mono" >
                                 {experience.company}
                             </h5>
-                            <p className="text-sm font-normal text-gray-700 leading-tight">
+                            <p className="text-sm font-normal text-gray-700 leading-tight overflow-auto">
                                 {experience.desc}
                             </p>
                             {experience.link && (
