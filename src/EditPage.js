@@ -33,7 +33,7 @@ export default function Editor({ obj, setObj }) {
     const postPage = async (e) => {
         try {
             e.target.disabled = true;
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}:${process.env.REACT_APP_API_PORT}/api/data`, obj);
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/data`, obj);
             setpublish(response.data.id);
             console.log('Data uploaded successfully:', response.data.id);
         } catch (error) {
