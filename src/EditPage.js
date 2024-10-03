@@ -16,6 +16,7 @@ export default function Editor({ obj, setObj }) {
     const [page, setpage] = useState(1)
     const [publish, setpublish] = useState(false)
     const [preview, setpreview] = useState(false)
+    const [loading, setloading] = useState(false)
 
 
     const prevPage = () => {
@@ -32,12 +33,15 @@ export default function Editor({ obj, setObj }) {
     }
     const postPage = async (e) => {
         try {
+            setloading(true)
             e.target.disabled = true;
             const response = await axios.post(`https://about-me-backend-k29v.onrender.com/api/data`, obj);
             setpublish(response.data.id);
             console.log('Data uploaded successfully:', response.data.id);
         } catch (error) {
             console.error('Error uploading data:', error);
+        } finally {
+            setloading(false)
         }
     }
     function randomInRange(min, max) {
@@ -65,12 +69,16 @@ export default function Editor({ obj, setObj }) {
             }, 250);
         }
     }
-    const copyToClipboard = () => {
+    const copyToClipboard = async () => {
+        console.log(inputRef.current)
         if (inputRef.current) {
-            inputRef.current.select();
-            document.execCommand("copy");
+            try {
+                await navigator.clipboard.writeText(inputRef.current.value);
+            } catch (error) {
+                console.error(error.message);
+            }
             setCopySuccess("Copied!");
-            setTimeout(() => setCopySuccess(""), 2000); // Clear the message after 2 seconds
+            setTimeout(() => setCopySuccess(""), 2000);
         }
     }
 
@@ -89,7 +97,7 @@ export default function Editor({ obj, setObj }) {
                         <div className="flex flex-col-reverse md:flex-row bg-gradient-to-tr from-red-600 via-cyan-800 via-45% to-violet-500 md:h-screen">
                             <div className="left flex flex-col md:w-1/2 p-5 md:overflow-y-auto">
                                 <h1 style={{ textShadow: "1px 2px 10px black" }} className="text-3xl font-bold p-2 text-white">About<span style={{ color: "#EAB308" }}>Me.</span></h1>
-                                <span className="text-[#ffd9a0] text-2xl font-medium indent-10 mt-14">Ready to bring your <span style={{ textShadow: "0px 0px 1.5px black" }}>Portfolio</span> to life ?</span>
+                                <span className="text-[#ffd9a0] text-2xl font-medium pl-10 mt-14">Ready to bring your <span style={{ textShadow: "0px 0px 1.5px black" }}>Portfolio</span> to life ?</span>
                                 <span className="text-[#ffffff] text-3xl font-medium ml-2 px-8 mt-10 w-5/6 border-b pb-10 border-[#141c41]">With <span style={{ textShadow: "0px 0px 3px #000000" }} className="text-[#ffffff]">AboutMe</span>, you can build a portfolio, and showcase your work like a pro — with <span className="text-[#ff2e12]">no</span> <code className="text-[#ffffff]">coding</code> required!</span>
                                 <div className="ml-10 mt-16 mb-4 text-3xl text-[#ededed]">
                                     Hi!!
@@ -115,7 +123,7 @@ export default function Editor({ obj, setObj }) {
                                 <div className="buttons flex justify-evenly mb-2 w-full">
                                     {page !== 1 && <button onClick={prevPage} className="border border-black px-2 py-1 text-lg rounded-3xl w-1/6">Previous</button>}
                                     {page !== 3 && <button type="submit" onClick={nextPage} className="border border-black px-2 py-1 text-lg rounded-3xl w-1/6">Next</button>}
-                                    {page === 3 && <button onClick={postPage} className="border border-black px-2 py-1 text-lg rounded-3xl w-1/6">Publish</button>}
+                                    {page === 3 && <button onClick={postPage} disabled={loading} className='border border-black px-2 py-1 text-lg rounded-3xl w-1/6'>Publish</button>}
                                 </div>
                             </div>
                         </div>}</>
@@ -128,7 +136,7 @@ export default function Editor({ obj, setObj }) {
                     <div className="my-auto flex flex-col items-center text-white">
                         <span className="text-2xl sm:text-4xl md:text-5xl text-center px-2 py-3"> HURAAYYY!!! </span>
                         <span className="text-4xl sm:text-5xl md:text-6xl mt-25 text-center px-2 py-3"> Portfolio Published</span>
-                        <div className="mt-12 tracking-tight font-extralight sm:text-xl">Visit your Portfolio <Link to={obj.slug} replace={true} className="text-yellow-400 hover:text-yellow-500 hover:underline">/{obj.slug}</Link></div>
+                        <div className="mt-12 tracking-tight font-extralight sm:text-xl">Visit your Portfolio <Link to={obj.slug} replace={true} className="text-yellow-400 hover:text-yellow-500 hover:underline">{obj.slug.toString().toUpperCase()}</Link></div>
                         <div className="mt-16 flex items-center border border-white h-10 sm:h-12 md:h-14 px-4 rounded-lg border-stroke bg-neutral-700 py-3">
                             <span>Your Key :</span>
                             <input type="text" ref={inputRef} value={publish} disabled className="w-max bg-transparent py-3 px-4 text-dark outline-none duration-200 font-mono tracking-wide" />
@@ -162,8 +170,7 @@ export default function Editor({ obj, setObj }) {
                             </button>
 
                         </div>
-                        <div className="mt-5 w-3/4 sm:mt-6 md:w-1/2">Note: This key will be essential for making updates and adjustments once the editing feature is available.
-                            &nbsp; Please keep this key confidential and do not share it with anyone to ensure the security of your portfolio.</div>
+                        <div className="mt-5 w-3/4 sm:mt-6 md:w-1/2 text-justify">Note: This key will be essential for making updates and adjustments once the editing feature is available. Please keep this key confidential and do not share it with anyone to ensure the security of your portfolio.</div>
                     </div>
 
                 </div>

@@ -4,372 +4,386 @@ import axios from "axios"
 import { debounce } from "lodash";
 
 function Personal({ detail, setDetail, className }) {
+    const [loading, setloading] = useState(false)
 
     const checkURL = useMemo(() =>
         debounce(async (value) => {
+            console.log(document.getElementById('url'))
             try {
+                setloading(true)
                 await axios.get(`https://about-me-backend-k29v.onrender.com/api/data/${value}`);
-                document.getElementById('url').setCustomValidity('URL already used');
+                document.getElementById('url')?.setCustomValidity('URL already used');
                 setDetail((prevDetail) => ({ ...prevDetail, slug: false }));
 
             } catch (err) {
                 if (err.response && err.response.status === 404) {
-                    document.getElementById('url').setCustomValidity('');
-                    setDetail((prevDetail) => ({ ...prevDetail, slug: value }));
+                    document.getElementById('url')?.setCustomValidity('');
+                    setDetail((prevDetail) => ({ ...prevDetail, slug: value.toString().toLowerCase() }));
                 } else {
-                    document.getElementById('username').setCustomValidity('An error occurred, please try again later');
+                    document.getElementById('url')?.setCustomValidity('An error occurred, please try again later');
                 }
             } finally {
-                document.getElementById('url').reportValidity();
+                setloading(false)
+                document.getElementById('url')?.reportValidity();
             }
         }, 1000)
         , []);
 
-    return <form id="personelform" className={`m-7 ${className}`}>
-        <div className="border-b border-gray-900/10 pb-12 flex flex-col ">
+    return <>
+        <form id="personelform" className={`m-7 ${className}`}>
+            <div className="border-b border-gray-900/10 pb-12 flex flex-col ">
 
-            <div className="text">
-                <h2 className="text-xl font-semibold text-gray-900">Profile</h2>
-                <p className="mt-1 text-sm leading-6 text-gray-600">
-                    Please provide accurate and professional information to ensure the best representation of your portfolio."
-                </p>
-            </div>
-
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
-
-                <div className="url sm:col-span-5">
-                    <label htmlFor="url" className="block text-sm font-medium leading-6 text-gray-900">
-                        Portfolio URL
-                    </label>
-                    <div className="mt-2">
-                        <div className={`flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 ${!detail.slug && 'focus-within:ring-red-800'} sm:max-w-md py-2 px-1 ${detail.slug && 'ring-green-900 focus-within:ring-green-900'} ring-2`}>
-                            <span className="flex select-none items-center pl-3 tracking-wider font-medium text-gray-500 sm:text-sm">aboutme.com/</span>
-                            <input type="text"
-                                name="url"
-                                onInput={(e) => checkURL(e.target.value)}
-                                id="url"
-                                defaultValue={detail.slug || ""}
-                                className="text-sm ml-0.5 w-full focus-visible:outline-none"
-                                required
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="photos col-span-5">
-                    <span className="block text-sm font-medium leading-6 text-gray-900">
-                        Photos
-                        <p className="mt-3 text-sm text-gray-600">(Use an image of minimum 450px width and height for best display)</p>
-                    </span>
-
-                    <div className="mt-2 flex items-center gap-x-3 col-span-4">
-                        <label htmlFor="p-1"><UserCircleIcon aria-hidden="true" className="col-span-1 h-12 w-12 text-gray-300" /></label>
-                        <div className="bg-white flex flex-grow rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input id="p-1"
-                                onChange={(e) => setDetail(
-                                    {
-                                        ...detail,
-                                        hero: { ...detail.hero, img: e.target.value }
-                                    }
-                                )
-                                }
-                                defaultValue={detail.hero.img || ""}
-                                name="p-1" type="text" placeholder="Photo-1 (URL)"
-                                className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus-visible:outline-none" />
-                        </div>
-                    </div>
-
-                    <div className="mt-2 flex items-center gap-x-3 col-span-4">
-                        <label htmlFor="p-2"><UserCircleIcon aria-hidden="true" className="col-span-1 h-12 w-12 text-gray-300" /></label>
-                        <div className="bg-white flex flex-grow rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input id="p-2"
-                                defaultValue={detail.about.img || ""}
-                                onChange={(e) => setDetail(
-                                    {
-                                        ...detail,
-                                        about: { ...detail.about, img: e.target.value }
-                                    }
-                                )}
-                                name="p-2" type="text" placeholder="Photo-2 (URL)"
-                                className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus-visible:outline-none" />
-                        </div>
-                    </div>
-
-                    <p className="mt-3 text-sm leading-6 text-gray-600">Upload photo on Google Drive (or any other platform) and paste there links here.</p>
-                </div>
-
-                <div className="name col-span-4">
-                    <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                        Name*
-                    </label>
-                    <div className="mt-2">
-                        <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input
-                                id="name"
-                                name="name"
-                                type="text"
-                                autoComplete="name"
-                                defaultValue={detail.hero.title || ""}
-                                onChange={(e) => setDetail(
-                                    {
-                                        ...detail,
-                                        hero: { ...detail.hero, title: e.target.value }
-                                    }
-                                )}
-                                placeholder="John Doe (what else you except Mr. Bean)"
-                                className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                                required
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="intro col-span-full">
-                    <label htmlFor="intro" className="block text-sm font-medium leading-6 text-gray-900">
-                        Introduction*
-                    </label>
-                    <div className="mt-2">
-                        <textarea id="intro"
-                            name="intro"
-                            defaultValue={detail.hero.desc || ""}
-                            onChange={(e) => setDetail(
-                                {
-                                    ...detail,
-                                    hero: { ...detail.hero, desc: e.target.value }
-                                }
-                            )}
-                            rows={4}
-                            placeholder="Try not to brag for more than 75-100 words."
-                            className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                            required />
-                    </div>
-                    <p className="mt-3 text-sm leading-6 text-gray-600">Write a brief introduction of yours.</p>
-                </div>
-
-                <div className="about col-span-full">
-                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                        About*
-                    </label>
-                    <div className="mt-2">
-                        <textarea id="about"
-                            onChange={(e) => setDetail(
-                                {
-                                    ...detail,
-                                    about: { ...detail.about, desc: e.target.value }
-                                }
-                            )}
-                            defaultValue={detail.about.desc || ""}
-
-                            name="about"
-                            placeholder="e.g.:'Oh, where do I even start? I'm a master of all trades (or at least Google search), with a remarkable ability to press buttons and make things happen.'
-                         P.S.: If you're here for some next-level inspiration, well... good luck with that!"
-                            rows={5}
-                            required
-                            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                        />
-                    </div>
-                    <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
-                </div>
-
-            </div>
-
-
-            <div className="text mt-10">
-                <h2 className="text-base font-bold leading-7 text-gray-900">Contact Information</h2>
-            </div>
-
-            <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
-
-                <div className="address col-span-full">
-                    <label htmlFor="address" className="ml-2 align-top text-sm font-medium leading-6 text-gray-900">
-                        Address
-                    </label>
-                    <div className="mt-2">
-                        <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <textarea
-                                id="address"
-                                name="address"
-                                type="text"
-                                defaultValue={detail.contact.add || ""}
-                                onChange={(e) => {
-                                    setDetail({
-                                        ...detail,
-                                        contact: { ...detail.contact, add: e.target.value }
-                                    })
-                                }}
-                                placeholder="Anywhere except here"
-                                className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="phone col-span-4">
-                    <label htmlFor="phone" className="block text-sm font-medium leading-6 text-gray-900">
-                        Phone
-                    </label>
-                    <div className="mt-2">
-                        <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                defaultValue={detail.contact.phone || ""}
-                                onChange={(e) => {
-                                    setDetail({
-                                        ...detail,
-                                        contact: { ...detail.contact, phone: e.target.value }
-                                    })
-                                }}
-                                placeholder="7253831818"
-                                className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="email col-span-4">
-                    <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                        Email*
-                    </label>
-                    <div className="mt-2">
-                        <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="justcall@me.com"
-                                defaultValue={detail.contact.email || ""}
-                                onChange={(e) => {
-                                    setDetail({
-                                        ...detail,
-                                        contact: { ...detail.contact, email: e.target.value }
-                                    })
-                                }}
-                                className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                                required
-                            />
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div className="text mt-10">
-                <h2 className="text-base font-bold leading-7 text-gray-900">Social Information</h2>
-            </div>
-
-            <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
-
-                <div className="linkedin col-span-5">
-                    <label htmlFor="linkedin" className="block text-sm font-medium leading-6 text-gray-900">
-                        LinkedIn URL
-                    </label>
-                    <div className="mt-2">
-                        <div className="flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md py-2 px-1">
-                            <label htmlFor="linkedin" className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">https://linkedin.com/in/</label>
-                            <input
-                                type="text"
-                                name="linkedin"
-                                id="linkedin"
-                                defaultValue={detail.about.linkedin || ""}
-                                placeholder="krishna-agarwal1611"
-                                onChange={(e) => {
-                                    setDetail({
-                                        ...detail,
-                                        about: { ...detail.about, linkedin: e.target.value }
-                                    })
-                                }}
-                                className="text-sm ml-0.5 w-full focus-visible:outline-none" />
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="ig col-span-5">
-                    <label htmlFor="ig" className="block text-sm font-medium leading-6 text-gray-900">
-                        Instagram URL
-                    </label>
-                    <div className="mt-2">
-                        <div className="flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md py-2 px-1">
-                            <label htmlFor="ig" className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">https://Instagram.com/</label>
-                            <input
-                                type="text"
-                                name="ig"
-                                id="ig"
-                                placeholder="don't have one"
-                                defaultValue={detail.about.instagram || ""}
-                                onChange={(e) => {
-                                    setDetail({
-                                        ...detail,
-                                        about: { ...detail.about, instagram: e.target.value }
-                                    })
-                                }}
-                                className="text-sm ml-0.5 w-full focus-visible:outline-none" />
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="github col-span-5">
-                    <label htmlFor="github" className="block text-sm font-medium leading-6 text-gray-900">
-                        Github URL
-                    </label>
-                    <div className="mt-2">
-                        <div className="flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md py-2 px-1">
-                            <label htmlFor="github" className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">https://github.com/</label>
-                            <input
-                                type="text"
-                                name="github"
-                                id="github"
-                                defaultValue={detail.about.github || ""}
-                                placeholder="krishnaAg16"
-                                onChange={(e) => {
-                                    setDetail({
-                                        ...detail,
-                                        about: { ...detail.about, github: e.target.value }
-                                    })
-                                }}
-                                className="text-sm ml-0.5 w-full focus-visible:outline-none" />
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="resume col-span-5">
-                    <label htmlFor="resume" className="block text-sm font-medium leading-6 text-gray-900">
-                        Resume Direct Download URL
-                    </label>
-                    <div className="mt-2">
-                        <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input
-                                id="resume"
-                                name="resume"
-                                type="text"
-                                defaultValue={detail.about.resume || ""}
-                                onChange={(e) => {
-                                    setDetail({
-                                        ...detail,
-                                        about: { ...detail.about, resume: e.target.value }
-                                    })
-                                }}
-                                placeholder="https://drive.google.com/uc?expor"
-                                className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
-                            />
-                        </div>
-                    </div>
-                    <p className="mt-1 leading-6 text-gray-600">
-                        You can create a direct download link from <a className="text-blue-900 font-medium" href="https://sites.google.com/site/gdocs2direct/" target="_blank" rel="noreferrer">here</a>.
+                <div className="text">
+                    <h2 className="text-xl font-semibold text-gray-900">Profile</h2>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                        Please provide accurate and professional information to ensure the best representation of your portfolio."
                     </p>
                 </div>
 
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
 
-            </div>
+                    <div className="url sm:col-span-5">
+                        <label htmlFor="url" className="block text-sm font-medium leading-6 text-gray-900">
+                            Portfolio URL
+                        </label>
+                        <div className="mt-2">
+                            <div className={`flex bg-white rounded-md shadow-sm ring-inset ring-gray-300 focus-within:ring-2 ${detail.slug === false && 'focus-within:ring-red-800 ring-red-800'} sm:max-w-md py-2 px-1 ${detail.slug && 'ring-green-900 focus-within:ring-green-900'} ring-2`}>
+                                <span className="flex select-none items-center pl-3 tracking-wider font-medium text-gray-500 sm:text-sm">aboutme.com/</span>
+                                <input type="text"
+                                    name="url"
+                                    onInput={(e) => checkURL(e.target.value)}
+                                    id="url"
+                                    defaultValue={detail.slug || ""}
+                                    className="text-sm ml-0.5 w-full focus-visible:outline-none"
+                                    required
+                                />
+
+                                {loading && <div role="status" className="mx-4">
+                                    <svg aria-hidden="true" class="inline w-3 h-3 text-gray-200 animate-spin fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+                                    </svg>
+                                </div>}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="photos col-span-5">
+                        <span className="block text-sm font-medium leading-6 text-gray-900">
+                            Photos Link
+                            <p className="mt-3 text-sm text-gray-600">(Use an image of minimum 450px width and height for best display)</p>
+                        </span>
+
+                        <div className="mt-2 flex items-center gap-x-3 col-span-4">
+                            <label htmlFor="p-1"><UserCircleIcon aria-hidden="true" className="col-span-1 h-12 w-12 text-gray-300" /></label>
+                            <div className="bg-white flex flex-grow rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <input id="p-1"
+                                    onChange={(e) => setDetail(
+                                        {
+                                            ...detail,
+                                            hero: { ...detail.hero, img: e.target.value }
+                                        }
+                                    )
+                                    }
+                                    defaultValue={detail.hero.img || ""}
+                                    name="p-1" type="text" placeholder="Photo-1 (URL)"
+                                    className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus-visible:outline-none" />
+                            </div>
+                        </div>
+
+                        <div className="mt-2 flex items-center gap-x-3 col-span-4">
+                            <label htmlFor="p-2"><UserCircleIcon aria-hidden="true" className="col-span-1 h-12 w-12 text-gray-300" /></label>
+                            <div className="bg-white flex flex-grow rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <input id="p-2"
+                                    defaultValue={detail.about.img || ""}
+                                    onChange={(e) => setDetail(
+                                        {
+                                            ...detail,
+                                            about: { ...detail.about, img: e.target.value }
+                                        }
+                                    )}
+                                    name="p-2" type="text" placeholder="Photo-2 (URL)"
+                                    className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus-visible:outline-none" />
+                            </div>
+                        </div>
+
+                        <p className="mt-3 text-sm leading-6 text-gray-600">Upload photo on Google Drive (or any other platform) and paste there links here.</p>
+                    </div>
+
+                    <div className="name col-span-4">
+                        <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+                            Name*
+                        </label>
+                        <div className="mt-2">
+                            <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    autoComplete="name"
+                                    defaultValue={detail.hero.title || ""}
+                                    onChange={(e) => setDetail(
+                                        {
+                                            ...detail,
+                                            hero: { ...detail.hero, title: e.target.value }
+                                        }
+                                    )}
+                                    placeholder="John Doe (what else you except Mr. Bean)"
+                                    className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="intro col-span-full">
+                        <label htmlFor="intro" className="block text-sm font-medium leading-6 text-gray-900">
+                            Introduction*
+                        </label>
+                        <div className="mt-2">
+                            <textarea id="intro"
+                                name="intro"
+                                defaultValue={detail.hero.desc || ""}
+                                onChange={(e) => setDetail(
+                                    {
+                                        ...detail,
+                                        hero: { ...detail.hero, desc: e.target.value }
+                                    }
+                                )}
+                                rows={4}
+                                placeholder="Try not to brag for more than 75-100 words."
+                                className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 focus-visible:outline-none"
+                                required />
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-gray-600">Write a brief introduction of yours.</p>
+                    </div>
+
+                    <div className="about col-span-full">
+                        <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                            About*
+                        </label>
+                        <div className="mt-2">
+                            <textarea id="about"
+                                onChange={(e) => setDetail(
+                                    {
+                                        ...detail,
+                                        about: { ...detail.about, desc: e.target.value }
+                                    }
+                                )}
+                                defaultValue={detail.about.desc || ""}
+
+                                name="about"
+                                placeholder="e.g.:'Oh, where do I even start? I'm a master of all trades (or at least Google search), with a remarkable ability to press buttons and make things happen.'
+                         P.S.: If you're here for some next-level inspiration, well... good luck with that!"
+                                rows={5}
+                                required
+                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 focus-visible:outline-none"
+                            />
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+                    </div>
+
+                </div>
 
 
-        </div >
-    </form >
+                <div className="text mt-10">
+                    <h2 className="text-base font-bold leading-7 text-gray-900">Contact Information</h2>
+                </div>
+
+                <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+
+                    <div className="address col-span-full">
+                        <label htmlFor="address" className="align-top text-sm font-medium leading-6 text-gray-900">
+                            Address
+                        </label>
+                        <div className="mt-2">
+                            <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <textarea
+                                    id="address"
+                                    name="address"
+                                    type="text"
+                                    defaultValue={detail.contact.add || ""}
+                                    onChange={(e) => {
+                                        setDetail({
+                                            ...detail,
+                                            contact: { ...detail.contact, add: e.target.value }
+                                        })
+                                    }}
+                                    placeholder="Anywhere except here"
+                                    className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="phone col-span-4">
+                        <label htmlFor="phone" className="block text-sm font-medium leading-6 text-gray-900">
+                            Phone
+                        </label>
+                        <div className="mt-2">
+                            <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <input
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    defaultValue={detail.contact.phone || ""}
+                                    onChange={(e) => {
+                                        setDetail({
+                                            ...detail,
+                                            contact: { ...detail.contact, phone: e.target.value }
+                                        })
+                                    }}
+                                    placeholder="+91-725XXXX714"
+                                    className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="email col-span-4">
+                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                            Email*
+                        </label>
+                        <div className="mt-2">
+                            <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="justcall@me.com"
+                                    defaultValue={detail.contact.email || ""}
+                                    onChange={(e) => {
+                                        setDetail({
+                                            ...detail,
+                                            contact: { ...detail.contact, email: e.target.value }
+                                        })
+                                    }}
+                                    className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div className="text mt-10">
+                    <h2 className="text-base font-bold leading-7 text-gray-900">Social Information</h2>
+                </div>
+
+                <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+
+                    <div className="linkedin col-span-5">
+                        <label htmlFor="linkedin" className="block text-sm font-medium leading-6 text-gray-900">
+                            LinkedIn URL
+                        </label>
+                        <div className="mt-2">
+                            <div className="flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md py-2 px-1">
+                                <label htmlFor="linkedin" className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">https://linkedin.com/in/</label>
+                                <input
+                                    type="text"
+                                    name="linkedin"
+                                    id="linkedin"
+                                    defaultValue={detail.about.linkedin || ""}
+                                    placeholder="krishna-agarwal1611"
+                                    onChange={(e) => {
+                                        setDetail({
+                                            ...detail,
+                                            about: { ...detail.about, linkedin: e.target.value }
+                                        })
+                                    }}
+                                    className="text-sm ml-0.5 w-full focus-visible:outline-none" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className="ig col-span-5">
+                        <label htmlFor="ig" className="block text-sm font-medium leading-6 text-gray-900">
+                            Instagram URL
+                        </label>
+                        <div className="mt-2">
+                            <div className="flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md py-2 px-1">
+                                <label htmlFor="ig" className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">https://Instagram.com/</label>
+                                <input
+                                    type="text"
+                                    name="ig"
+                                    id="ig"
+                                    placeholder="don't have one"
+                                    defaultValue={detail.about.instagram || ""}
+                                    onChange={(e) => {
+                                        setDetail({
+                                            ...detail,
+                                            about: { ...detail.about, instagram: e.target.value }
+                                        })
+                                    }}
+                                    className="text-sm ml-0.5 w-full focus-visible:outline-none" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className="github col-span-5">
+                        <label htmlFor="github" className="block text-sm font-medium leading-6 text-gray-900">
+                            Github URL
+                        </label>
+                        <div className="mt-2">
+                            <div className="flex bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md py-2 px-1">
+                                <label htmlFor="github" className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">https://github.com/</label>
+                                <input
+                                    type="text"
+                                    name="github"
+                                    id="github"
+                                    defaultValue={detail.about.github || ""}
+                                    placeholder="krishnaAg16"
+                                    onChange={(e) => {
+                                        setDetail({
+                                            ...detail,
+                                            about: { ...detail.about, github: e.target.value }
+                                        })
+                                    }}
+                                    className="text-sm ml-0.5 w-full focus-visible:outline-none" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className="resume col-span-5">
+                        <label htmlFor="resume" className="block text-sm font-medium leading-6 text-gray-900">
+                            Resume Direct Download URL
+                        </label>
+                        <div className="mt-2">
+                            <div className="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <input
+                                    id="resume"
+                                    name="resume"
+                                    type="text"
+                                    defaultValue={detail.about.resume || ""}
+                                    onChange={(e) => {
+                                        setDetail({
+                                            ...detail,
+                                            about: { ...detail.about, resume: e.target.value }
+                                        })
+                                    }}
+                                    placeholder="https://drive.google.com/uc?expor"
+                                    className="px-2 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 focus-visible:outline-none"
+                                />
+                            </div>
+                        </div>
+                        <p className="mt-1 leading-6 text-gray-600">
+                            You can create a direct download link from <a className="text-blue-900 font-medium" href="https://sites.google.com/site/gdocs2direct/" target="_blank" rel="noreferrer">here</a>.
+                        </p>
+                    </div>
+
+
+                </div>
+
+
+            </div >
+        </form >
+    </>
 }
 
 function Services({ detail, setDetail, className }) {
@@ -485,7 +499,7 @@ function Services({ detail, setDetail, className }) {
 
                 <div className="svg col-span-full">
                     <label htmlFor="svg" className="block text-sm font-medium leading-6 text-gray-900">
-                        Service SVG Icon
+                        Service SVG Icon (JSX)
                     </label>
                     <div className="mt-2">
                         <textarea
@@ -498,7 +512,7 @@ function Services({ detail, setDetail, className }) {
                             onInput={(e) => setNewService({ ...newService, svg: e.target.value || 0 })} />
                     </div>
                     <p className="mt-1 text-sm leading-6 text-gray-600">
-                        You can copy svg from <a href="http://heroicons.com" className="text-blue-800 font-semibold" target="_blank" rel="noreferrer">Heroicons(follow here)</a> or any other svg provider
+                        You can copy jsx of svg icon from <a href="http://heroicons.com" className="text-blue-800 font-semibold" target="_blank" rel="noreferrer">Heroicons(follow here)</a> or any other svg provider
                     </p>
                 </div>
 

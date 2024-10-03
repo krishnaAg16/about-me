@@ -100,7 +100,7 @@ function Cort({ obj }) {
         contact: {
             desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, voluptates? Beatae deserunt eaque cum perferendis, vero odit eveniet eos sequi.',
             add: 'Anywhere except here',
-            phone: '+91-72518181232',
+            phone: '+91-725XXXXX32',
             email: 'justcall@me.com',
 
         },
@@ -340,7 +340,7 @@ function Cort({ obj }) {
                         <div className="service-list flex flex-wrap flex-col sm:flex-row gap-5 items-center p-4 justify-center">
                             {service.content?.length > 0 && service.content.map((ser, index) => (
                                 <div key={index} className="service flex flex-col gap-3 rounded-md size-64 p-5" style={{ backgroundColor: color.bg }}>
-                                    <div className="svg text-3xl mx-auto font-thin" style={{ color: color.p2 }}
+                                    <div className="svg w-9 h-9 mx-auto font-thin" style={{ color: color.p2 }}
                                         dangerouslySetInnerHTML={{ __html: ser.svg }}
                                     />
                                     <div className="title text-2xl text-center font-semibold" style={{ color: color.s1 }}>
