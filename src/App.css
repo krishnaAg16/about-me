@@ -1,38 +1,35 @@
-.App {
-  text-align: center;
+:root{
+  --bg: #F4F6F6;
+  --fg: #C8E2E2;
+  --sc: #000000;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.dark-theme{
+  --bg: #020617;
+  --fg: #111827;
+  --sc: #FFFFFF;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  
+  .dots{
+    background: radial-gradient(var(--sc), var(--bg) 50%);
   }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  
+  .custom-scroll::-webkit-scrollbar {
+    width: 12px; /* Scrollbar width */
   }
-  to {
-    transform: rotate(360deg);
+
+  .custom-scroll::-webkit-scrollbar-track {
+    background: var(--bg); /* Background color */
   }
-}
+
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--fg); /* Scrollbar color */
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid var(--bg); /* Add some padding around the thumb */
+  }
+
+  .custom-scroll {
+    scrollbar-color: var(--fg) var(--bg); /* Thumb (scrollbar) and track (background) */
+    scrollbar-width: thin; /* Make the scrollbar thinner */
+  }
