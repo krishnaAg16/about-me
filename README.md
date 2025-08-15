@@ -26,24 +26,12 @@ With an intuitive form-based interface, users can modify different sections of t
 - [React Router](https://reactrouter.com/) — Client-side navigation.
 - [Axios](https://axios-http.com/) — API interaction.
 - [Tailwind CSS](https://tailwindcss.com/) — Responsive styling.
-
-**Backend (Connected API Service):**
-- [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/) — RESTful API.
-- [MongoDB Atlas](https://www.mongodb.com/atlas) — Cloud database.
-- Integrated **data validation** for robust backend operations.
+- [Vercel](https://vercel.com/) — For Hosting.
 
 
 ## Live Demo
 
 [🔗 View Live Site](https://aboutfoliome.vercel.app)
-
-## Tech Stack
-
-- **Frontend**: React (with JSX)
-- **Routing**: React Router DOM
-- **Testing**: Jest, React Testing Library
-- **Styling**: Tailwind CSS
-- **Hosting**: Vercel
 
 ## Author
 
