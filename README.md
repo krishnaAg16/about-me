@@ -11,12 +11,12 @@ Welcome to my portfolio builder project built using React! This site showcases t
 - **Frontend**: React (with JSX)
 - **Routing**: React Router DOM
 - **Testing**: Jest, React Testing Library
-- **Styling**: CSS (or Tailwind, if applicable)
-- **Hosting**: GitHub Pages
+- **Styling**: Tailwind CSS
+- **Hosting**: Vercel
 
 ## Author
 
   Krishna Agarwal
   Agra, India
-  krishnaag16113india@gmail.com
+  krishna.ag.dev@proton.me
   [LinkedIn](https://www.linkedin.com/in/krishna-agarwal1611)
